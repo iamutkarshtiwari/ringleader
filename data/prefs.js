@@ -10,6 +10,7 @@ document.addEventListener('ready', function() {
 
 // Sends callback data back to GCLI return statement
 window.addEventListener('message', function(event) {
+    console.log("executing..");
     self.port.emit('execute', event.data);
 }, false);
 
@@ -17,28 +18,58 @@ window.addEventListener('message', function(event) {
 self.port.on("callback", function(callbackData) {
   document.querySelector('.sidebar-output').innerHTML += '<br> \> ' + callbackData.callbackData;
   //var cloned = cloneInto(greeting, document.defaultView);
-   // var evt = document.createEvent('CustomEvent');
-   // evt.initCustomEvent("refresh-lookup", true, true, callbackData.lookupData);
-   // document.documentElement.dispatchEvent(evt);
+   
+});
+
+// Refreshes the commands' lookup lists
+self.port.on("refresh-lookups", function(data) {
+  // console.log("refreshing..")
+  var cloned = cloneInto(data.list, document.defaultView);
+  var evt = document.createEvent('CustomEvent');
+  evt.initCustomEvent("refresh-pnh-lookup", true, true, cloned);
+  document.documentElement.dispatchEvent(evt);
 });
 
 // Injects the commands to GCLI webpage
 self.port.on('display', function(commands) {
-    var actualCode = '(' + function(commands) {
 
-        require([ 'gcli/index', 'demo/index' ], function(gcli) {
-            for(idx in commands.commands.commands) {
-              if (commands.commands.commands[idx].hasOwnProperty('exec')) {
-                eval("commands.commands.commands[idx].exec = " + commands.commands.commands[idx].exec);
+  var actualCode = '(' + function(commands) {
+
+    require([ 'gcli/index', 'demo/index' ], function(gcli) {
+        for(idx in commands.commands.commands) {
+          let command = commands.commands.commands;
+          // console.log(command[idx]);
+          if (command[idx].hasOwnProperty('exec')) {
+            // Evaluate stringified command function
+            eval("command[idx].exec = " + command[idx].exec);
+          }
+          if (command[idx].params && command[idx].params.length > 0) {
+            for (var index = 0; index < command[idx].params.length; index++) {
+              if (command[idx].params[index].type.name === 'selection') {
+                // eval("command[idx].params[index].type.data = " + command[idx].params[index].type.data);
+                // command[idx].params[index].type.data = lookup(command[idx].name);
               }
-              gcli.addCommand(commands.commands.commands[idx]);
             }
-     
-          gcli.createDisplay();
-        });
-    } + ')('+ JSON.stringify(commands) +');';
+          }
 
-    var script = document.createElement('script');
-    script.textContent = actualCode;
-    (document.head || document.documentElement).appendChild(script);
+          // for (var index = 0; index < command[idx].params.length; index++) {
+          //   console.log("ho")
+          // }
+          //  {
+            // console.log(command[idx].params)
+
+            // console.log(commands.commands.commands[idx].type.data);
+            // eval("command[idx].params.type.data = " + command[idx].params.type.data);
+          // }
+
+          gcli.addCommand(commands.commands.commands[idx]);
+        }
+ 
+      gcli.createDisplay();
+    });
+  } + ')('+ JSON.stringify(commands) +');';
+
+  var script = document.createElement('script');
+  script.textContent = actualCode;
+  (document.head || document.documentElement).appendChild(script);
 });

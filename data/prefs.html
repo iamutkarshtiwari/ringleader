@@ -24,17 +24,26 @@ one at http://mozilla.org/MPL/2.0/.
   <script src="../lib/gcli-uncompressed.js" type="text/javascript"></script>
 </body>
 
-<!-- <script>
-var lookupData = [["hello", "moto"]];
-window.addEventListener('refresh-lookup', function(event) {
-  // Refreshes the lookupData for PnH
-  lookupData = event.detail;
+<script>
+var pnhLookupData = [];
+var toolLookupData = [];
+
+window.addEventListener('refresh-pnh-lookup', function(event) {
+
+  pnhLookupData = event.detail;
+
 }, false);
 
-var doLookup = function() {
-  console.log("hola");
-}
-</script> -->
+window.addEventListener('refresh-tool-lookup', function(event) {
+  alert('tool alert');
+
+}, false);
+
+// var doLookup = function() {
+//   console.log("hola");
+// }
+
+</script>
 
 
 </html>
