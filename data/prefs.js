@@ -16,6 +16,7 @@ window.addEventListener('message', function(event) {
 
 // Injects callback data to the document
 self.port.on("callback", function(callbackData) {
+  console.log("callback ", callbackData);
   document.querySelector('.sidebar-output').innerHTML += '<br> \> ' + callbackData.callbackData;
   //var cloned = cloneInto(greeting, document.defaultView);
    
