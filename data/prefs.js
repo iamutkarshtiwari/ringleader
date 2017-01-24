@@ -10,13 +10,15 @@ document.addEventListener('ready', function() {
 
 // Sends callback data back to GCLI return statement
 window.addEventListener('message', function(event) {
-    console.log("executing..");
     self.port.emit('execute', event.data);
+}, false);
+
+window.addEventListener('refresh-lookups', function(event) {
+    self.port.emit('refresh-lookups', event.data);
 }, false);
 
 // Injects callback data to the document
 self.port.on("callback", function(callbackData) {
-  console.log("callback ", callbackData);
   document.querySelector('.sidebar-output').innerHTML += '<br> \> ' + callbackData.callbackData;
 });
 
@@ -43,9 +45,8 @@ self.port.on('display', function(commands) {
           }
           if (command[idx].params && command[idx].params.length > 0) {
             for (var index = 0; index < command[idx].params.length; index++) {
-              if (command[idx].params[index].type.name === 'selection') {
+              if (command[idx].params[index].type.name === 'selection' && typeof command[idx].params[index].type.data === 'string') {
                 eval("command[idx].params[index].type.data = " + command[idx].params[index].type.data);
-                // command[idx].params[index].type.data = lookup(command[idx].name);
               }
             }
           }

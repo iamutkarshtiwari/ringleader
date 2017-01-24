@@ -29,13 +29,23 @@ one at http://mozilla.org/MPL/2.0/.
     var toolLookupData = [];
 
     window.addEventListener('refresh-pnh-lookup', function(event) {
-      alert("ehllo");
       pnhLookupData = event.detail;
     }, false);
 
     window.addEventListener('refresh-tool-lookup', function(event) {
-      alert('tool alert');
+      toolLookupData = event.detail
+      console.log("tool lookup ", toolLookupData);
 
     }, false);
+
+    // Emits lookup signal 
+    document.onkeypress = function (e) {
+      if (document.getElementsByClassName("gcli-in-input")[1].value.length === 0) {
+          var event = document.createEvent('CustomEvent');
+          event.initCustomEvent("refresh-lookups", true, true, {});
+          document.documentElement.dispatchEvent(event);
+      }
+    };
+
   </script>
 </html>
