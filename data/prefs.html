@@ -37,15 +37,5 @@ one at http://mozilla.org/MPL/2.0/.
       console.log("tool lookup ", toolLookupData);
 
     }, false);
-
-    // Emits lookup signal 
-    document.onkeypress = function (e) {
-      if (document.getElementsByClassName("gcli-in-input")[1].value.length === 0) {
-          var event = document.createEvent('CustomEvent');
-          event.initCustomEvent("refresh-lookups", true, true, {});
-          document.documentElement.dispatchEvent(event);
-      }
-    };
-
   </script>
 </html>

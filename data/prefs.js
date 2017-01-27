@@ -19,11 +19,11 @@ window.addEventListener('refresh-lookups', function(event) {
 
 // Injects callback data to the document
 self.port.on("callback", function(callbackData) {
-  document.querySelector('.sidebar-output').innerHTML += '<br> \> ' + callbackData.callbackData;
+  document.querySelector('.sidebar-output').innerHTML += '<br> \> ' + callbackData;
 });
 
 // Refreshes the commands' lookup lists
-self.port.on("refresh-lookups", function(data) {
+self.port.on("refreshed-lookups", function(data) {
   var cloned = cloneInto(data.list, document.defaultView);
   var evt = document.createEvent('CustomEvent');
   evt.initCustomEvent(data.signal, true, true, cloned);
@@ -36,21 +36,19 @@ self.port.on('display', function(commands) {
   var actualCode = '(' + function(commands) {
 
     require([ 'gcli/index', 'demo/index' ], function(gcli) {
-        for(idx in commands.commands.commands) {
-          let command = commands.commands.commands;
-          // console.log(command[idx]);
-          if (command[idx].hasOwnProperty('exec')) {
+        for(idx in commands) {
+          if (commands[idx].hasOwnProperty('exec')) {
             // Evaluate stringified command function
-            eval("command[idx].exec = " + command[idx].exec);
+            eval("commands[idx].exec = " + commands[idx].exec);
           }
-          if (command[idx].params && command[idx].params.length > 0) {
-            for (var index = 0; index < command[idx].params.length; index++) {
-              if (command[idx].params[index].type.name === 'selection' && typeof command[idx].params[index].type.data === 'string') {
-                eval("command[idx].params[index].type.data = " + command[idx].params[index].type.data);
+          if (commands[idx].params && commands[idx].params.length > 0) {
+            for (var index = 0; index < commands[idx].params.length; index++) {
+              if (commands[idx].params[index].type.name === 'selection' && typeof commands[idx].params[index].type.data === 'string') {
+                eval("commands[idx].params[index].type.data = " + commands[idx].params[index].type.data);
               }
             }
           }
-          gcli.addCommand(commands.commands.commands[idx]);
+          gcli.addCommand(commands[idx]);
         }
  
       gcli.createDisplay();
