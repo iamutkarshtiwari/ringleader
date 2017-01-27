@@ -4,7 +4,6 @@ v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain
 one at http://mozilla.org/MPL/2.0/.
 -->
 <html>
-
   <head>
   	<title>GCLI: Graphical Command Line</title>
     <style type="text/css" media="screen">
@@ -34,8 +33,18 @@ one at http://mozilla.org/MPL/2.0/.
 
     window.addEventListener('refresh-tool-lookup', function(event) {
       toolLookupData = event.detail
-      console.log("tool lookup ", toolLookupData);
-
     }, false);
+<<<<<<< HEAD
+=======
+
+    // Emits lookup signal 
+    document.onkeypress = function (e) {
+      if (document.getElementsByClassName("gcli-in-input")[1].value.length === 0) {
+          var event = document.createEvent('CustomEvent');
+          event.initCustomEvent("refresh-lookups", true, true, {});
+          document.documentElement.dispatchEvent(event);
+      }
+    };
+>>>>>>> 4e3e99cac66e70293df4c158df7173e0ff5e5e5f
   </script>
 </html>

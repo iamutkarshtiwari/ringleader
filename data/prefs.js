@@ -8,7 +8,7 @@ document.addEventListener('ready', function() {
     console.log('JS LOADED');
 });
 
-// Sends callback data back to GCLI return statement
+// Initiates the signal to execute the typed command
 window.addEventListener('message', function(event) {
     self.port.emit('execute', event.data);
 }, false);
@@ -32,12 +32,16 @@ self.port.on("refreshed-lookups", function(data) {
 
 // Injects the commands to GCLI webpage
 self.port.on('display', function(commands) {
-  
   var actualCode = '(' + function(commands) {
-
     require([ 'gcli/index', 'demo/index' ], function(gcli) {
+<<<<<<< HEAD
         for(idx in commands) {
           if (commands[idx].hasOwnProperty('exec')) {
+=======
+        for(idx in commands.commands) {
+          let command = commands.commands;
+          if (command[idx].hasOwnProperty('exec')) {
+>>>>>>> 4e3e99cac66e70293df4c158df7173e0ff5e5e5f
             // Evaluate stringified command function
             eval("commands[idx].exec = " + commands[idx].exec);
           }
@@ -48,7 +52,11 @@ self.port.on('display', function(commands) {
               }
             }
           }
+<<<<<<< HEAD
           gcli.addCommand(commands[idx]);
+=======
+          gcli.addCommand(commands.commands[idx]);
+>>>>>>> 4e3e99cac66e70293df4c158df7173e0ff5e5e5f
         }
  
       gcli.createDisplay();
