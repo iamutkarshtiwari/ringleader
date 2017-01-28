@@ -4,10 +4,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-document.addEventListener('ready', function() {
-    console.log('JS LOADED');
-});
-
 // Sends callback data back to GCLI return statement
 window.addEventListener('message', function(event) {
     self.port.emit('execute', event.data);
@@ -32,9 +28,7 @@ self.port.on("refreshed-lookups", function(data) {
 
 // Injects the commands to GCLI webpage
 self.port.on('display', function(commands) {
-  
   var actualCode = '(' + function(commands) {
-
     require([ 'gcli/index', 'demo/index' ], function(gcli) {
         for(idx in commands) {
           if (commands[idx].hasOwnProperty('exec')) {
@@ -50,10 +44,10 @@ self.port.on('display', function(commands) {
           }
           gcli.addCommand(commands[idx]);
         }
- 
       gcli.createDisplay();
     });
   } + ')('+ JSON.stringify(commands) +');';
+
   var script = document.createElement('script');
   script.textContent = actualCode;
   (document.head || document.documentElement).appendChild(script);
