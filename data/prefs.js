@@ -15,7 +15,7 @@ window.addEventListener('refresh-lookups', function(event) {
 
 // Injects callback data to the document
 self.port.on("callback", function(callbackData) {
-  document.querySelector('#sidebar-output').innerHTML += '<br>' + callbackData;
+  document.querySelector('#sidebar-output').innerHTML += '<br> \> ' + callbackData;
 });
 
 // Refreshes the commands' lookup lists
