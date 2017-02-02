@@ -19,14 +19,19 @@ one at http://mozilla.org/MPL/2.0/.
 
   <body style="width: 80%;">
     <div id="gcli-root" style="display: inline-block; width: 70%"></div>
-    <div class="sidebar-output" style="width: 25%;background: #000;position: fixed;top: 0;height: 100%;right: 0; color: #00ff00;">
+    <div id="sidebar-output" style="width: 25%;background: #000;position: fixed;top: 0;height: 100%;right: 0; color: #00ff00; overflow-y: scroll;">
     </div>
+    <button id="clear-output-btn" style="position: fixed; top: 5px; right: 5px; padding: 3px 5px;">Clear</button>
     <script src="../lib/gcli-uncompressed.js" type="text/javascript"></script>
   </body>
 
   <script>
     var pnhLookupData = [];
     var toolLookupData = [];
+
+   document.querySelector('#clear-output-btn').addEventListener('click', function() {
+     document.querySelector('#sidebar-output').innerHTML = '';
+    });
 
     window.addEventListener('refresh-pnh-lookup', function(event) {
       pnhLookupData = event.detail;
